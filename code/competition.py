@@ -9,9 +9,6 @@ class Competition:
         self.competition_international = competition_international
         self.country_name = country_name
 
-    def add_season(season_id, season_name):
-        competition_seasons[season_id, season_name]
-
     def get_competition_id(self):
         return self.competition_id
 

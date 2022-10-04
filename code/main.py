@@ -1,17 +1,16 @@
 import numpy as np 
 import json
 
-from competition_factory import Competition_factory
+from object_factory import Competition_factory
+from object_factory import Match_factory
 from competition import Competition
+from dataloader import Dataloader
 
 competitions = []
 
 # Function that loads the dataset
 def load_data():
-    with open("test.json") as json_file:
-        json_data = json.load(json_file)
-
-    return json_data
+    return Dataloader.load_data()
 
 # Method that uses competition_factory to add new competitions
 def new_competition(competition_id, competition_name, competition_gender, 
@@ -45,8 +44,9 @@ def load_competitions(data):
 
 # Main method
 def main():
-    data = load_data()
-    load_competitions(data)
+    d = Dataloader()
+    d.load_data("/Users/ianvexler/Documents/Archivos Ian/Projects/open-data/data/competitions.json")
+    d.load_match(2, 44)
 
 if __name__ == "__main__":
     main()
