@@ -1,5 +1,9 @@
 import numpy as np 
+import pandas as pd
 import json
+
+import matplotlib.pylab as plt
+import seaborn
 
 from object_factory import Competition_factory
 from object_factory import Match_factory
@@ -45,8 +49,11 @@ def load_competitions(data):
 # Main method
 def main():
     d = Dataloader()
-    d.load_data("/Users/ianvexler/Documents/Archivos Ian/Projects/open-data/data/competitions.json")
-    d.load_match(2, 44)
+    #d.load_event_69()
+    d.load_events()
+    
+    #d.load_data("/Users/ianvexler/Documents/Archivos Ian/Projects/open-data/data/competitions.json")
+    #d.load_match(2, 44)
 
 if __name__ == "__main__":
     main()

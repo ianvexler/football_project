@@ -1,4 +1,5 @@
-import json
+import os, json
+import pandas as pd
 
 from sqlalchemy import null
 
@@ -9,6 +10,7 @@ from matches import Matches
 
 competitions = []
 matches = []
+event_list = []
 json_data = None
 
 class Dataloader:
@@ -50,29 +52,14 @@ class Dataloader:
             # Sets in_data to false to check if the next competition is in the list
             in_data = False
 
-    def new_match(self, match_id, competition, country_name, season, match_date, 
-        kick_off, stadium, stadium_country, referee_name, home_team, home_team_gender, 
-        home_team_manager, home_team_group, home_team_country, away_team, away_team_gender, 
-        away_team_manager, away_team_group, away_team_country, home_score, away_score, match_status,
-        match_week, competition_stage):
+    def new_match(self, match_id, competition, season, match_date, 
+        kick_off, stadium, home_team, away_team, home_score, away_score, 
+        match_status, match_week, competition_stage):
 
         # Uses competition_factory class to create a new competition object
-        return Match_factory.create_match(match_id, competition, country_name, season, match_date, 
-        kick_off, stadium, stadium_country, referee_name, home_team, home_team_gender, 
-        home_team_manager, home_team_group, home_team_country, away_team, away_team_gender, 
-        away_team_manager, away_team_group, away_team_country, home_score, away_score, match_status,
-        match_week, competition_stage)
-
-    def load_matches(self, data):
-        for d in data:
-            for m in matches:
-                matches.append(self.new_match(d["match_id"], d["competition"], d["country_name"], 
-                    d["season"], d["match_date"], d["kick_off"] , d["stadium"], d["stadium_country"],
-                    d["referee_name"], d["home_team"], d["home_team_gender"], d["home_team_manager"],
-                    d["home_team_group"], d["home_team_country"], d["away_team"], d["away_team_gender"], 
-                    d["away_team_manager"], d["away_team_group"], d["away_team_country"], d["home_score"], 
-                    d["away_score"], d["match_status"], d["match_week"], d["competition_stage"]))
-
+        return Match_factory.create_match(match_id, competition, season, match_date, 
+        kick_off, stadium, home_team, away_team, home_score, away_score, 
+        match_status, match_week, competition_stage)
 
     def load_match(self, competition_id, match_id):
             # This will open a specific match file depending on the match_id
@@ -82,4 +69,30 @@ class Dataloader:
                 match_json_data = json.load(json_file)
 
             self.load_matches(match_json_data)
-            print(matches)
+
+    def load_matches(self, data):
+        for d in data:
+            matches.append(self.new_match(d["match_id"], d["competition"], d["season"], 
+                d["match_date"], d["kick_off"] , d["stadium"], d["home_team"], 
+                d["away_team"], d["home_score"], d["away_score"], d["match_status"], 
+                d["match_week"], d["competition_stage"]))
+
+    def load_events(self):
+        json_file_path = "/Users/ianvexler/Documents/Archivos Ian/Projects/open-data/data/events/69242.json"
+
+        with open(json_file_path, 'r') as j:
+            events = json.loads(j.read())
+
+        self.load_event_types(events)
+        
+    def load_event_types(self, events):
+        for event in events:
+            if "player" in event:
+                if (event["type"])["name"] not in event_list:
+                    event_list.append((event["type"])["name"])
+
+# Types: ball receipt, ball recovery, dispossessed, duel, block, 
+# offside, clearance, interception, dribble, shot, pressure, half start
+# substitution, own goal against, foul won, foul committed, goalkeeper,
+# bad behaviour, own goal for, player on, player off, shield, pass, 50/50
+# hald end*, starting XI, tatical shift, error, miscontrol, dribble past, injury stoppage, referee ball-drop
