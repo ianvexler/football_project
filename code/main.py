@@ -10,6 +10,8 @@ from object_factory import Match_factory
 from competition import Competition
 from dataloader import Dataloader
 
+from GUI import GUI
+
 competitions = []
 
 # Function that loads the dataset
@@ -51,7 +53,8 @@ def main():
     d = Dataloader()
     #d.load_event_69()
     d.load_events()
-    
+    theGUI = GUI()
+    theGUI.openGUI()
     #d.load_data("/Users/ianvexler/Documents/Archivos Ian/Projects/open-data/data/competitions.json")
     #d.load_match(2, 44)
 

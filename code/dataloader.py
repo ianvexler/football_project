@@ -1,8 +1,6 @@
 import os, json
 import pandas as pd
 
-from sqlalchemy import null
-
 from object_factory import Competition_factory
 from object_factory import Match_factory
 from competition import Competition
